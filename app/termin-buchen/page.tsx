@@ -107,9 +107,9 @@ export default function TerminBuchenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen bg-[#050505]">
       {/* Header */}
-      <div className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+      <div className="border-b border-white/10 bg-[#050505]/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between max-w-5xl">
           <img
             src="/images/wingman-logo.png"
@@ -128,16 +128,16 @@ export default function TerminBuchenPage() {
           <div className="flex items-center justify-between mb-4">
             {[1, 2, 3, 4].map((s) => (
               <div key={s} className="flex items-center flex-1">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all ${
-                  s < step ? "bg-primary text-primary-foreground" :
-                  s === step ? "bg-primary text-primary-foreground ring-4 ring-primary/20" :
+                <div className={`w-10 h-10 flex items-center justify-center font-semibold transition-all ${
+                  s < step ? "bg-[#fae608] text-black" :
+                  s === step ? "bg-[#fae608] text-black ring-2 ring-[#fae608]/30" :
                   "bg-muted text-muted-foreground"
                 }`}>
                   {s < step ? <Check className="w-5 h-5" /> : s}
                 </div>
                 {s < 4 && (
                   <div className={`flex-1 h-1 mx-2 transition-all ${
-                    s < step ? "bg-primary" : "bg-muted"
+                    s < step ? "bg-[#fae608]" : "bg-white/10"
                   }`} />
                 )}
               </div>
@@ -152,11 +152,11 @@ export default function TerminBuchenPage() {
         </div>
 
         {/* Content Card */}
-        <Card className="p-8 md:p-12 shadow-xl border-primary/10">
+        <Card className="p-8 md:p-12 rounded-none bg-[#0d0d0d] border-white/10 shadow-none">
           {step === 1 && (
             <div className="space-y-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#fae608]/10 mb-4">
                   <User className="w-8 h-8 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">Ihre Kontaktdaten</h2>
@@ -175,7 +175,7 @@ export default function TerminBuchenPage() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="z.B. Max Mustermann"
-                      className="pl-10 h-12 text-base"
+                      className="pl-10 h-12 text-base rounded-none border-white/15 bg-[#050505] focus-visible:border-[#fae608] focus-visible:ring-0"
                       required
                     />
                   </div>
@@ -191,7 +191,7 @@ export default function TerminBuchenPage() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="ihre@email.de"
-                      className="pl-10 h-12 text-base"
+                      className="pl-10 h-12 text-base rounded-none border-white/15 bg-[#050505] focus-visible:border-[#fae608] focus-visible:ring-0"
                       required
                     />
                   </div>
@@ -207,13 +207,13 @@ export default function TerminBuchenPage() {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+49 123 456789"
-                      className="pl-10 h-12 text-base"
+                      className="pl-10 h-12 text-base rounded-none border-white/15 bg-[#050505] focus-visible:border-[#fae608] focus-visible:ring-0"
                       required
                     />
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-base" size="lg">
+                <Button type="submit" className="w-full h-12 text-base rounded-none bg-[#fae608] text-black hover:bg-[#ffef4d] font-semibold" size="lg">
                   Weiter zum Datum
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -224,7 +224,7 @@ export default function TerminBuchenPage() {
           {step === 2 && (
             <div className="space-y-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#fae608]/10 mb-4">
                   <CalendarIcon className="w-8 h-8 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">Wählen Sie ein Datum</h2>
@@ -239,12 +239,12 @@ export default function TerminBuchenPage() {
                   selected={selectedDate}
                   onSelect={handleDateSelect}
                   disabled={(date) => date < new Date() || date.getDay() === 0 || date.getDay() === 6}
-                  className="rounded-md border shadow-sm"
+                  className="rounded-none border border-white/15 bg-[#050505]"
                 />
               </div>
               
               <Button 
-                variant="outline" 
+                variant="outline" style={{borderRadius:0}} 
                 onClick={() => setStep(1)} 
                 className="w-full h-12 text-base"
               >
@@ -257,7 +257,7 @@ export default function TerminBuchenPage() {
           {step === 3 && (
             <div className="space-y-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#fae608]/10 mb-4">
                   <Clock className="w-8 h-8 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">Wählen Sie eine Uhrzeit</h2>
@@ -273,7 +273,7 @@ export default function TerminBuchenPage() {
                 {timeSlots.map((time) => (
                   <Button
                     key={time}
-                    variant="outline"
+                    variant="outline" style={{borderRadius:0}}
                     onClick={() => handleTimeSelect(time)}
                     className="h-14 text-base hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
                   >
@@ -283,7 +283,7 @@ export default function TerminBuchenPage() {
               </div>
               
               <Button 
-                variant="outline" 
+                variant="outline" style={{borderRadius:0}} 
                 onClick={() => setStep(2)} 
                 className="w-full h-12 text-base"
               >
@@ -296,7 +296,7 @@ export default function TerminBuchenPage() {
           {step === 4 && (
             <div className="space-y-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#fae608]/10 mb-4">
                   <Check className="w-8 h-8 text-primary" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">Termin bestätigen</h2>
@@ -363,7 +363,7 @@ export default function TerminBuchenPage() {
                   {!isSubmitting && <Check className="ml-2 h-5 w-5" />}
                 </Button>
                 <Button 
-                  variant="outline" 
+                  variant="outline" style={{borderRadius:0}} 
                   onClick={() => setStep(3)} 
                   className="w-full h-12 text-base"
                   disabled={isSubmitting}

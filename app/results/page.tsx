@@ -400,10 +400,11 @@ export default function ResultsPage() {
                   }
                   window.location.href = "/termin-buchen"
                 }}
+                className="w-full sm:w-auto"
               >
                 Erstgespräch jetzt buchen
               </SplitButton>
-              <SplitButton variant="dark" onClick={() => window.open("https://www.wingmancoaching.de/", "_blank")}>
+              <SplitButton variant="dark" className="w-full sm:w-auto" onClick={() => window.open("https://www.wingmancoaching.de/", "_blank")}>
                 Mehr erfahren
               </SplitButton>
             </div>

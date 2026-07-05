@@ -165,7 +165,7 @@ export async function generatePDF(
   doc.setDrawColor(250, 230, 8)
   doc.setLineWidth(0.6)
   doc.line(margin, yPosition + 17, pageWidth - margin, yPosition + 17)
-  yPosition += 20
+  yPosition += 32
 
   doc.setTextColor(200, 200, 200)
   doc.setFontSize(14)
