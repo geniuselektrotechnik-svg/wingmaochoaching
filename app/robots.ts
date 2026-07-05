@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api/", "/results", "/questions", "/appointments"],
       },
     ],
-    sitemap: "https://wingmancoaching.de/sitemap.xml",
+    sitemap: "https://wingmancoaching-test.de/sitemap.xml",
   }
 }
