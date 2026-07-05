@@ -86,7 +86,7 @@ export async function generatePDF(
   doc.setTextColor(180, 180, 180)
   doc.setFontSize(9)
   doc.setFont("helvetica", "bold")
-  doc.text("/ WINGMAN MITTELSTANDSINDEX /", pageWidth / 2, 60, { align: "center" })
+  doc.text("WINGMAN MITTELSTANDSINDEX", pageWidth / 2, 60, { align: "center" })
 
   doc.setTextColor(250, 230, 8) // Bright yellow
   doc.setFontSize(32)
@@ -158,7 +158,7 @@ export async function generatePDF(
   doc.setTextColor(250, 230, 8)
   doc.setFontSize(10)
   doc.setFont("helvetica", "bold")
-  doc.text("/ EXECUTIVE SUMMARY /", margin, yPosition)
+  doc.text("EXECUTIVE SUMMARY", margin, yPosition)
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(22)
   doc.text("Executive Summary", margin, yPosition + 12)
@@ -281,7 +281,7 @@ export async function generatePDF(
   doc.setTextColor(148, 163, 184)
   doc.setFontSize(9)
   doc.setFont("helvetica", "bold")
-  doc.text("/ WINGMAN MITTELSTANDSINDEX /", margin + 10, yPosition + 10)
+  doc.text("WINGMAN MITTELSTANDSINDEX", margin + 10, yPosition + 10)
   
   doc.setTextColor(250, 230, 8)
   doc.setFontSize(28)
@@ -915,7 +915,7 @@ export async function generatePDF(
       doc.setTextColor(250, 230, 8)
       doc.setFontSize(10)
       doc.setFont("helvetica", "bold")
-      doc.text("/ KOMPETENZBEREICH /", margin, yPosition)
+      doc.text("KOMPETENZBEREICH", margin, yPosition)
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(20)
       doc.text(`${cat.category}`, margin, yPosition + 12)

@@ -547,7 +547,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .w-select {
-  background-color: #f3f3f3;
+  background-color: #ffffff;
 }
 
 .w-select[multiple] {
@@ -613,7 +613,7 @@ textarea.w-input, textarea.w-select {
 
 .w-file-upload-uploading-btn {
   cursor: pointer;
-  background-color: #fafafa;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   margin: 0;
   padding: 8px 12px;
@@ -623,7 +623,7 @@ textarea.w-input, textarea.w-select {
 }
 
 .w-file-upload-file {
-  background-color: #fafafa;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   flex-grow: 1;
   justify-content: space-between;
@@ -667,7 +667,7 @@ textarea.w-input, textarea.w-select {
 
 .w-file-upload-label {
   cursor: pointer;
-  background-color: #fafafa;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   margin: 0;
   padding: 8px 12px;
@@ -2134,7 +2134,7 @@ textarea.w-input, textarea.w-select {
   --_color---slate-gray: #555;
   --_color---sunshine-yellow: #fae608;
   --_spaceing---section: 100px;
-  --_color---soft-ivory: #f8f8f4;
+  --_color---soft-ivory: #ffffff;
   --_color---jet-black: #060606;
   --_spaceing---page-top-gap: 55px;
   --_spaceing---container: 30px;
@@ -2778,7 +2778,7 @@ figure {
 }
 
 .mega-menu-button-box {
-  background-color: #f8f8f40a;
+  background-color: #ffffff0a;
   border-top: 1px solid #414141;
   justify-content: space-between;
   align-items: center;
@@ -2806,7 +2806,7 @@ figure {
 .mega-menu-info-box {
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  background-color: #f8f8f40a;
+  background-color: #ffffff0a;
   border: 1px solid #414141;
   flex-flow: column;
   display: flex;
