@@ -1246,10 +1246,17 @@ export async function generatePDF(
   doc.setFillColor(0, 0, 0)
   doc.roundedRect(margin, contactBoxY, pageWidth - margin * 2, 50, 0, 0, "F")
   
-  doc.setTextColor(255, 215, 0)
-  doc.setFontSize(16)
-  doc.setFont("helvetica", "bold")
-  doc.text("Wingman Coaching", margin + 10, contactBoxY + 15)
+  // Logo statt Text-Schriftzug
+  try {
+    const cw = 44
+    const ch = cw * (146 / 632)
+    doc.addImage(WINGMAN_LOGO_PNG, "PNG", margin + 10, contactBoxY + 6, cw, ch)
+  } catch {
+    doc.setTextColor(250, 230, 8)
+    doc.setFontSize(16)
+    doc.setFont("helvetica", "bold")
+    doc.text("Wingman Coaching", margin + 10, contactBoxY + 15)
+  }
 
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(11)
