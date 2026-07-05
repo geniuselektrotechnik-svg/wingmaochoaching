@@ -22,36 +22,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Ungültige E-Mail-Adresse" }, { status: 400 })
     }
 
-    // Erstelle Assessment in Supabase
-    const { data, error } = await supabase
-      .from("assessments")
-      .insert({
-        first_name: firstName,
-        last_name: lastName,
-        company: company,
-        email: email,
-        phone: phone,
-        industry: industry,
-      })
-      .select("id")
-      .single()
+    // Erstelle Assessment in Supabase.
+    // Wenn die Datenbank nicht erreichbar ist (z. B. pausiert), blockieren wir den
+    // Nutzer NICHT: Das Assessment läuft dann ohne Speicherung weiter (assessmentId = null).
+    let assessmentId: string | null = null
+    try {
+      const { data, error } = await supabase
+        .from("assessments")
+        .insert({
+          first_name: firstName,
+          last_name: lastName,
+          company: company,
+          email: email,
+          phone: phone,
+          industry: industry,
+        })
+        .select("id")
+        .single()
 
-    if (error) {
-      console.error("Supabase error:", error)
-      return NextResponse.json({ error: "Fehler beim Speichern in der Datenbank" }, { status: 500 })
+      if (error) {
+        console.error("[DB offline?] Assessment nicht gespeichert:", error.message)
+      } else {
+        assessmentId = data.id
+
+        // Notification für Admin (nur wenn Speichern geklappt hat, Fehler nicht fatal)
+        const { error: notifyError } = await supabase.from("notifications").insert({
+          type: "assessment_started",
+          title: "Neues Assessment gestartet",
+          message: `${firstName} ${lastName} (${email}) hat ein Assessment gestartet${company ? ` - ${company}` : ""}.`,
+          related_id: assessmentId,
+        })
+        if (notifyError) console.error("Notification fehlgeschlagen:", notifyError.message)
+      }
+    } catch (dbError) {
+      console.error("[DB offline?] Assessment nicht gespeichert:", dbError)
     }
-
-    // Erstelle Notification für Admin
-    await supabase.from("notifications").insert({
-      type: "assessment_started",
-      title: "Neues Assessment gestartet",
-      message: `${firstName} ${lastName} (${email}) hat ein Assessment gestartet${company ? ` - ${company}` : ""}.`,
-      related_id: data.id,
-    })
 
     return NextResponse.json({
       success: true,
-      assessmentId: data.id,
+      assessmentId,
+      persisted: assessmentId !== null,
     })
   } catch (error: any) {
     console.error("Error creating assessment:", error)

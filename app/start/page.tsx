@@ -64,7 +64,12 @@ export default function StartPage() {
       }
 
       // Speichere ID und User-Daten im sessionStorage
-      sessionStorage.setItem("assessmentId", data.assessmentId)
+      // (assessmentId kann null sein, wenn die Datenbank gerade nicht erreichbar ist)
+      if (data.assessmentId) {
+        sessionStorage.setItem("assessmentId", data.assessmentId)
+      } else {
+        sessionStorage.removeItem("assessmentId")
+      }
       sessionStorage.setItem("userEmail", formData.email)
       sessionStorage.setItem("userName", `${formData.firstName} ${formData.lastName}`)
       sessionStorage.setItem("userCompany", formData.company || "")
