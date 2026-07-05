@@ -1,13 +1,10 @@
 "use client"
 
-import { Input } from "@/components/ui/input"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ArrowLeft, Check } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { SplitButton } from "@/components/ui/split-button"
 
 export default function PaymentPage() {
   const router = useRouter()
@@ -43,6 +40,14 @@ export default function PaymentPage() {
     },
   ]
 
+  const features = [
+    "78 Fragen (67 Skala-Fragen + 11 Freitext)",
+    "KI gestützte Tiefenanalyse Ihres Unternehmens",
+    "Premium PDF Report (20-25 Seiten) mit Statistiken",
+    "Personalisierter 90 Tage Entwicklungsplan",
+    "Detaillierte Handlungsempfehlungen basierend auf Ihren Antworten",
+  ]
+
   const handleApplyVoucher = () => {
     if (voucherCode.toLowerCase() === "wingman100") {
       setVoucherApplied(true)
@@ -66,164 +71,136 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#050505]">
       {/* Logo Header */}
-      <div className="flex justify-center pt-6 md:pt-8 pb-4">
-        <img
-          src="/images/wingman-logo.png"
-          alt="Wingman Coaching"
-          className="h-12 md:h-14 w-auto"
-        />
+      <div className="flex justify-center pt-7 md:pt-9 pb-4">
+        <a href="/" aria-label="Zur Startseite">
+          <img src="/images/wingman-logo.png" alt="Wingman Coaching" className="h-10 md:h-12 w-auto" />
+        </a>
       </div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 md:py-10 max-w-2xl">
-        <div className="space-y-6">
+      <main className="container mx-auto px-5 py-8 md:py-12 max-w-2xl">
+        <div className="space-y-10">
           {/* Header */}
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Ihre Unternehmeranalyse</h1>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Professionelles 360° Assessment
-            </p>
+          <div className="space-y-4">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ Schritt 1 von 3 /</p>
+            <h1 className="text-3xl md:text-4xl font-medium tracking-[-0.02em] leading-[1.15] text-white">
+              Ihre Unternehmensanalyse
+            </h1>
+            <p className="text-[15px] leading-relaxed text-white/60">Professionelles 360° Assessment</p>
           </div>
 
-          {/* Compact Pricing Card */}
-          <Card className="p-6 md:p-8 bg-card border-border shadow-lg">
-            <div className="space-y-4">
-              <div className="text-center pb-4 border-b border-border/50">
-                <div className="text-3xl md:text-4xl font-bold text-yellow-500 mb-1">599€</div>
-                <p className="text-sm text-muted-foreground">Einmalige Investition</p>
-              </div>
-
-              <div>
-                <ul className="space-y-2.5">
-                  <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">78 Fragen (67 Skala-Fragen + 11 Freitext)</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">KI-gestützte Tiefenanalyse Ihres Unternehmens</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Premium PDF-Report (20-25 Seiten) mit Statistiken</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Personalisierter 90-Tage Entwicklungsplan</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">Detaillierte Handlungsempfehlungen basierend auf Ihren Antworten</span>
-                  </li>
-                </ul>
+          {/* Pricing */}
+          <div className="bg-[#0d0d0d] border border-white/10">
+            <div className="p-7 md:p-9 border-b border-white/10">
+              <div className="flex items-end gap-3">
+                <span className="text-5xl md:text-6xl font-medium tracking-[-0.03em] text-[#fae608] leading-none">
+                  599€
+                </span>
+                <span className="text-[13px] uppercase tracking-[0.06em] text-white/50 pb-1.5">
+                  Einmalige Investition
+                </span>
               </div>
             </div>
-          </Card>
+            <ul className="p-7 md:p-9 space-y-4">
+              {features.map((f) => (
+                <li key={f} className="flex items-start gap-3.5">
+                  <span className="w-2 h-2 bg-[#fae608] mt-[7px] shrink-0" />
+                  <span className="text-[15px] leading-relaxed text-white/80">{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* Gutschein-Code Section */}
-          <Card className="p-6 bg-gradient-to-br from-green-500/10 to-card/50 border-green-500/30">
-            <h2 className="text-lg font-semibold text-foreground mb-4">Gutschein-Code einlösen</h2>
-            <div className="space-y-3">
-              <div className="flex gap-2">
-                <Input
-                  type="text"
-                  placeholder="Gutschein-Code eingeben"
-                  value={voucherCode}
-                  onChange={(e) => {
-                    setVoucherCode(e.target.value)
-                    setVoucherError("")
-                  }}
-                  className="flex-1"
-                  disabled={voucherApplied}
-                />
-                <Button
-                  onClick={handleApplyVoucher}
-                  disabled={!voucherCode || voucherApplied}
-                  className="bg-green-500 text-black hover:bg-green-400"
-                >
-                  Einlösen
-                </Button>
-              </div>
-              {voucherError && (
-                <p className="text-sm text-red-500">{voucherError}</p>
-              )}
-              {voucherApplied && (
-                <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                  <Check className="w-5 h-5" />
-                  <p className="text-sm font-semibold">Gutschein erfolgreich eingelöst! Sie können nun kostenlos fortfahren.</p>
-                </div>
-              )}
+          {/* Gutschein */}
+          <div className="space-y-4">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-white/70">Gutschein-Code</p>
+            <div className="flex flex-col sm:flex-row gap-[2px]">
+              <Input
+                type="text"
+                placeholder="Gutschein-Code eingeben"
+                value={voucherCode}
+                onChange={(e) => {
+                  setVoucherCode(e.target.value)
+                  setVoucherError("")
+                }}
+                disabled={voucherApplied}
+                className="h-[50px] flex-1 text-base rounded-none border border-white/15 bg-[#0d0d0d] text-white placeholder:text-white/35 focus-visible:border-[#fae608] focus-visible:ring-0 transition-colors duration-200"
+              />
+              <SplitButton variant="dark" onClick={handleApplyVoucher} disabled={!voucherCode || voucherApplied}>
+                Einlösen
+              </SplitButton>
             </div>
-          </Card>
+            {voucherError && <p className="text-sm text-red-400 font-semibold">{voucherError}</p>}
+            {voucherApplied && (
+              <div className="p-4 bg-[#0d0d0d] border-l-2 border-[#fae608]">
+                <p className="text-sm font-semibold text-[#fae608]">
+                  Gutschein erfolgreich eingelöst. Sie können nun kostenlos fortfahren.
+                </p>
+              </div>
+            )}
+          </div>
 
-          {/* Payment Methods */}
+          {/* Zahlungsmethoden */}
           {!voucherApplied && (
-            <div className="space-y-3">
-              <h2 className="text-lg font-semibold text-foreground">Zahlungsmethode wählen</h2>
-              {paymentMethods.map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => setSelectedMethod(method.id)}
-                  className={`w-full text-left transition-all ${
-                    selectedMethod === method.id ? "ring-2 ring-primary" : "hover:border-primary/50"
-                  }`}
-                >
-                  <Card className="p-4 md:p-6 bg-card/50 backdrop-blur-sm border-border/50">
-                    <div className="flex items-center gap-3 md:gap-4">
-                      <div className="flex items-center justify-center w-12 h-10 md:w-14 md:h-12 flex-shrink-0">
+            <div className="space-y-4">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.06em] text-white/70">
+                Zahlungsmethode wählen
+              </p>
+              <div className="space-y-[2px]">
+                {paymentMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    onClick={() => setSelectedMethod(method.id)}
+                    className={`w-full text-left transition-colors duration-150 bg-[#0d0d0d] border p-4 md:p-5 ${
+                      selectedMethod === method.id
+                        ? "border-[#fae608]"
+                        : "border-white/10 hover:border-white/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center w-16 h-10 bg-white shrink-0">
                         <Image
                           src={method.logo || "/placeholder.svg"}
                           alt={method.name}
-                          width={method.id === "paypal" ? 50 : 80}
-                          height={method.id === "paypal" ? 40 : 50}
-                          className="object-contain"
+                          width={method.id === "paypal" ? 42 : 52}
+                          height={method.id === "paypal" ? 32 : 30}
+                          className="object-contain max-h-7"
                           unoptimized={method.id === "sepa" || method.id === "paypal"}
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground mb-1 text-sm md:text-base">{method.name}</h3>
-                        <p className="text-xs md:text-sm text-muted-foreground truncate">{method.description}</p>
+                        <h3 className="font-semibold text-white text-sm md:text-base">{method.name}</h3>
+                        <p className="text-[13px] text-white/50 truncate">{method.description}</p>
                       </div>
                       <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          selectedMethod === method.id ? "border-primary bg-primary" : "border-muted-foreground"
+                        className={`w-4 h-4 shrink-0 border transition-colors ${
+                          selectedMethod === method.id ? "bg-[#fae608] border-[#fae608]" : "border-white/30"
                         }`}
-                      >
-                        {selectedMethod === method.id && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-primary-foreground" />
-                        )}
-                      </div>
+                      />
                     </div>
-                  </Card>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => router.push("/")}
-              className="gap-2 bg-transparent order-2 sm:order-1"
-            >
-              <ArrowLeft className="w-4 h-4" />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
+            <SplitButton variant="dark" direction="left" onClick={() => router.push("/")} className="order-2 sm:order-1">
               Zurück
-            </Button>
+            </SplitButton>
 
-            <Button
+            <SplitButton
               onClick={handleContinue}
               disabled={!voucherApplied && !selectedMethod}
-              size="lg"
-              className="bg-yellow-500 text-black hover:bg-yellow-400 px-8 order-1 sm:order-2 font-bold"
+              className="order-1 sm:order-2"
             >
               {voucherApplied ? "Kostenlos zur Analyse" : "Weiter zur Analyse"}
-            </Button>
+            </SplitButton>
           </div>
 
-          <p className="text-xs text-center text-muted-foreground pt-2 md:pt-4">Sichere Zahlung - SSL-verschlüsselt</p>
+          <p className="text-[13px] text-center text-white/40">Sichere Zahlung – SSL-verschlüsselt</p>
         </div>
       </main>
     </div>
