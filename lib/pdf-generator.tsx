@@ -1,6 +1,7 @@
 import type { AssessmentResult } from "./scoring"
 import { typeProfiles, typeStatesAndActions } from "./scoring"
 import { assessmentQuestions } from "./questions"
+import { WINGMAN_LOGO_PNG } from "./logo-data"
 
 // Interface fuer Freitext-Antworten
 interface FreetextAnswers {
@@ -16,13 +17,6 @@ export async function generatePDF(
   const { jsPDF } = await import("jspdf")
   const doc = new jsPDF()
   
-  // SVG Logo direkt als Data-URI (funktioniert immer)
-  const svgLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
-    <rect width="200" height="60" fill="#fbbf24" rx="8"/>
-    <text x="100" y="38" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" textAnchor="middle" fill="#000">WINGMAN</text>
-  </svg>`
-  const logoDataUri = `data:image/svg+xml;base64,${btoa(svgLogo)}`
-
   const pageWidth = doc.internal.pageSize.getWidth()
   const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 20
@@ -71,20 +65,22 @@ export async function generatePDF(
   doc.setFillColor(0, 0, 0) // Black
   doc.rect(0, 0, pageWidth, pageHeight, "F")
 
-  // Wingman Logo oben - NUR GELBER TEXT, KEINE BOX
+  // Echtes Wingman-Logo oben auf dem Cover (632x146 px, Seitenverhältnis ~4.33)
   const logoY = 30
-  
-  // "WINGMAN" Text in Gelb
-  doc.setTextColor(251, 191, 36) // Yellow
-  doc.setFontSize(18)
-  doc.setFont("helvetica", "bold")
-  doc.text("WINGMAN", pageWidth / 2, logoY, { align: "center" })
-  
-  // "COACHING" Text darunter in Gelb
-  doc.setTextColor(251, 191, 36) // Yellow
-  doc.setFontSize(10)
-  doc.setFont("helvetica", "normal")
-  doc.text("COACHING", pageWidth / 2, logoY + 8, { align: "center" })
+  try {
+    const logoWidth = 64
+    const logoHeight = logoWidth * (146 / 632)
+    doc.addImage(WINGMAN_LOGO_PNG, "PNG", (pageWidth - logoWidth) / 2, logoY - 10, logoWidth, logoHeight)
+  } catch {
+    // Fallback: Text-Logo, falls das Bild nicht geladen werden kann
+    doc.setTextColor(251, 191, 36)
+    doc.setFontSize(18)
+    doc.setFont("helvetica", "bold")
+    doc.text("WINGMAN", pageWidth / 2, logoY, { align: "center" })
+    doc.setFontSize(10)
+    doc.setFont("helvetica", "normal")
+    doc.text("COACHING", pageWidth / 2, logoY + 8, { align: "center" })
+  }
 
   // "Wingman Mittelstandsindex" Label - ganz oben
   doc.setTextColor(180, 180, 180)

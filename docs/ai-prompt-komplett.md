@@ -1,10 +1,13 @@
-# Kompletter AI-Analyse-Prompt
+# KI-Analyse: Wo liegt der Prompt?
 
-Dies ist der EXAKTE Prompt, der an die KI gesendet wird, um die Assessment-Ergebnisse zu analysieren.
+Der komplette Prompt für die Assessment-Auswertung liegt **inline** in:
 
-## Wo wird er verwendet?
-- Datei: `/lib/ai-analysis.ts`
-- Funktion: `generateAIAnalysis()`
-- API: `/api/analyze/route.ts`
+- **Datei:** `app/api/analyze/route.ts`
+- **Modell:** `openai/gpt-4o-mini` (via AI SDK), temperature 0.4, max 12000 Output-Tokens
+- **Ablauf:** Body-Validierung (UUIDs, Skala 1-10 geklemmt, Freitexte sanitized)
+  → `calculateResults()` (lib/scoring.ts) → GPT-Aufruf (1 Retry)
+  → JSON-Extraktion → bei Fehlschlag Score-basierter Fallback (`buildFallbackAnalysis`)
+  → Speicherung in Supabase (nur bereinigte Antworten, nur wenn `completed_at` noch NULL).
 
-## Der komplette Prompt wird aus ai-analysis.ts gelesen...
+Hinweis: Die frühere Datei `lib/ai-analysis.ts` war toter Code (nirgends importiert,
+anderes Modell, widersprüchliches Interface) und wurde am 05.07.2026 entfernt.

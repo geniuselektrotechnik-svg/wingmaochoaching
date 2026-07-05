@@ -23,20 +23,88 @@ function sanitizeIndustry(value: unknown): string {
   return value.replace(/[^a-zA-ZäöüÄÖÜß\s\-&,./()]/g, "").trim().substring(0, 100)
 }
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+// Extrahiert das erste vollständige JSON-Objekt aus einer Modellantwort
+function extractJson(text: string): unknown {
+  let cleaned = text.trim()
+  if (cleaned.startsWith("```")) {
+    cleaned = cleaned.replace(/^```(?:json)?\s*/, "").replace(/```\s*$/, "")
+  }
+  const start = cleaned.indexOf("{")
+  const end = cleaned.lastIndexOf("}")
+  if (start === -1 || end <= start) throw new Error("Kein JSON in der Antwort")
+  return JSON.parse(cleaned.slice(start, end + 1))
+}
+
+// Fallback-Analyse aus den Scores, damit der Kunde nie ohne Ergebnis dasteht
+function buildFallbackAnalysis(basicResults: {
+  overallScore: number
+  entrepreneurType: string
+  categoryScores: { category: string; percentage: number }[]
+}) {
+  const sorted = [...basicResults.categoryScores].sort((a, b) => b.percentage - a.percentage)
+  const strengths = sorted.slice(0, 3).map((c) => ({
+    title: c.category,
+    description: `Mit ${c.percentage}% gehört ${c.category} zu Ihren stärksten Bereichen. Diese Basis können Sie gezielt für die nächste Wachstumsphase nutzen.`,
+    businessImpact: "Stabiles Fundament für Skalierung und Planbarkeit.",
+    developmentTip: "Im Wingman Sparring bauen wir diese Stärke systematisch zum Wettbewerbsvorteil aus.",
+  }))
+  const developmentAreas = sorted.slice(-3).reverse().map((c) => ({
+    title: c.category,
+    analysis: `${c.category} liegt mit ${c.percentage}% unter Ihren übrigen Bereichen und begrenzt aktuell die Gesamtentwicklung.`,
+    risks: "Ungenutzte Hebel bremsen Wachstum und Planbarkeit.",
+    roi: "Hoher Hebel bei strukturierter Professionalisierung.",
+    firstSteps: "In den nächsten 14 Tagen: Ist-Zustand dokumentieren und einen klaren Verantwortlichen definieren.",
+  }))
+  return {
+    executiveSummary: `Als ${basicResults.entrepreneurType} erreichen Sie einen Gesamtscore von ${basicResults.overallScore}/100. Ihre detaillierte Auswertung zeigt klare Stärken und konkrete Entwicklungshebel. Die vollständige KI-Tiefenanalyse konnte nicht erstellt werden; diese Auswertung basiert direkt auf Ihren Scores.`,
+    strengths,
+    developmentAreas,
+    patternInsights: [],
+    blindSpots: [],
+    actionPlan: {
+      shortTerm: ["Erstgespräch mit Wingman Coaching vereinbaren und die drei größten Hebel priorisieren."],
+      mediumTerm: ["Für den schwächsten Kompetenzbereich einen strukturierten Verbesserungsprozess aufsetzen."],
+      longTerm: ["Skalierbare Systeme und Führungsstrukturen etablieren, die ohne permanente Eingriffe funktionieren."],
+    },
+    recommendations: {
+      wingmanProgram: {
+        primary: "MASTERCLASS CONSULTING",
+        reason: "Ihr Profil zeigt strukturelle Hebel, die sich mit systematischer Begleitung am schnellsten realisieren lassen.",
+        expectedOutcome: "Klare Prozesse, belastbare Strukturen und planbares Wachstum.",
+      },
+      next7Days: ["Ergebnisse mit dem Führungsteam teilen", "Größten Engpass schriftlich definieren", "Erstgespräch buchen"],
+    },
+    _fallback: true,
+  }
+}
+
 export async function POST(request: Request) {
   try {
-    const { answers, assessmentId, industry: rawIndustry } = await request.json()
+    const { answers, assessmentId: rawAssessmentId, industry: rawIndustry } = await request.json()
     const industry = sanitizeIndustry(rawIndustry)
 
-    // Freitext-Antworten vorab sanitizen
+    // assessmentId nur akzeptieren, wenn es eine valide UUID ist
+    const assessmentId =
+      typeof rawAssessmentId === "string" && UUID_REGEX.test(rawAssessmentId) ? rawAssessmentId : null
+
+    if (!answers || typeof answers !== "object" || Array.isArray(answers)) {
+      return NextResponse.json({ error: "Ungültige Anfrage" }, { status: 400 })
+    }
+
+    // Antworten validieren: Freitexte sanitizen, Skala-Werte auf 1-10 klemmen,
+    // nur bekannte Fragen-IDs zulassen
+    const knownIds = new Set(assessmentQuestions.map((q) => q.id))
     const sanitizedAnswers: Record<string, string | number> = {}
-    for (const [key, val] of Object.entries(answers ?? {})) {
+    for (const [key, val] of Object.entries(answers as Record<string, unknown>)) {
+      if (!knownIds.has(key)) continue
       if (key.includes("text") && typeof val === "string") {
         sanitizedAnswers[key] = sanitizeUserInput(val)
-      } else if (typeof val === "number") {
-        sanitizedAnswers[key] = val
+      } else if (typeof val === "number" && Number.isFinite(val)) {
+        sanitizedAnswers[key] = Math.min(10, Math.max(1, Math.round(val)))
       } else if (typeof val === "string") {
-        sanitizedAnswers[key] = val
+        sanitizedAnswers[key] = sanitizeUserInput(val)
       }
     }
 
@@ -77,9 +145,7 @@ Berücksichtige die Branche "${industry}" in JEDER Empfehlung:
 - Vergleiche mit Branchenstandards wo möglich` : ""}
 
 Detaillierte Scores pro Kompetenzbereich:
-${Object.entries(basicResults.categoryScores)
-  .map(([cat, score]) => `- ${cat}: ${score}%`)
-  .join("\n")}
+${basicResults.categoryScores.map((c) => `- ${c.category}: ${c.percentage}%`).join("\n")}
 
 Komplette Antworten (Skala 1-10):
 ${assessmentQuestions.map((q) => {
@@ -151,7 +217,7 @@ WICHTIG - ANALYSIERE DIE MUSTER:
 - Welche TATSÄCHLICHEN Widersprüche gibt es? (NUR erwähnen, wenn wirklich vorhanden!)
 - Wo blockieren NACHWEISLICH SCHWACHE Bereiche die STARKEN Bereiche?
 - Welche unbewussten Blockaden zeigen sich IN DEN FREITEXT-ANTWORTEN?
-- Was sind die 3 größten Entwicklungsspielräume (KEINE "Blind Spots")?
+- Was sind die 3 größten Entwicklungsspielräume? (Formuliere sie chancenorientiert; das JSON-Feld "blindSpots" füllst du mit genau diesen 3 Punkten)
 
 ⚠️ KRITISCH: NIEMALS einen Bereich als schwach darstellen, der STARK bewertet wurde!
 Beispiel: Wenn "Vertrieb & Wachstum" > 70% Score hat → NICHT als Schwäche oder Widerspruch darstellen!
@@ -162,7 +228,7 @@ Liefere:
    - Für jede Stärke: Detaillierte Beschreibung (2-3 Sätze)
    - Wie manifestiert sich diese Stärke konkret im Business?
    - Welchen messbaren Business-Impact hat sie? (z.B. "Kann Umsatz um 20-30% steigern")
-   - Welches spezifische Entwicklungstool empfiehlst du? (Buch/Methode/Coach-Typ)
+   - Wie lässt sich diese Stärke mit Wingman Coaching weiter ausbauen? (KEINE Bücher/externen Tools!)
    - Benchmark: Wie vergleicht sich der Unternehmer mit Top-Performern?
 
 2. ENTWICKLUNGSBEREICHE (5-7 Bereiche mit KONKRETEM IMPACT)
@@ -248,7 +314,7 @@ Antworte im JSON-Format:
       "title": "...",
       "description": "...",
       "businessImpact": "Konkret: z.B. 'Kann Umsatz um 25% steigern'",
-      "developmentTip": "Konkretes Tool/Buch/Methode",
+      "developmentTip": "Wie Wingman Coaching diese Stärke gezielt ausbaut (KEINE Bücher/externen Tools)",
       "benchmark": "Vergleich mit Top-Performern"
     }
   ],
@@ -284,33 +350,35 @@ Antworte im JSON-Format:
   }
 }`
 
-    const { text } = await generateText({
-      model: "openai/gpt-4o-mini",
-      prompt,
-      temperature: 0.7,
-      maxOutputTokens: 8000,
-    })
-
-    let cleanedText = text.trim()
-
-    // Remove \`\`\`json or \`\`\` wrappers if present
-    if (cleanedText.startsWith("```json")) {
-      cleanedText = cleanedText.replace(/^```json\s*/, "").replace(/```\s*$/, "")
-    } else if (cleanedText.startsWith("```")) {
-      cleanedText = cleanedText.replace(/^```\s*/, "").replace(/```\s*$/, "")
+    // KI-Auswertung mit einem Wiederholungsversuch; danach Score-basierter
+    // Fallback, damit der Kunde nie mit einem Fehler ohne Ergebnis dasteht
+    let aiAnalysis: unknown = null
+    for (let attempt = 1; attempt <= 2 && !aiAnalysis; attempt++) {
+      try {
+        const { text } = await generateText({
+          model: "openai/gpt-4o-mini",
+          prompt,
+          temperature: 0.4,
+          maxOutputTokens: 12000,
+        })
+        aiAnalysis = extractJson(text)
+      } catch (err) {
+        console.error(`AI attempt ${attempt} failed:`, err)
+      }
+    }
+    if (!aiAnalysis) {
+      aiAnalysis = buildFallbackAnalysis(basicResults)
     }
 
-    const aiAnalysis = JSON.parse(cleanedText.trim())
-
-    // Update Assessment in Supabase with results
+    // Ergebnis speichern - nur bereinigte Antworten, und nur solange das
+    // Assessment noch nicht abgeschlossen ist (kein Überschreiben fremder/fertiger Daten)
     if (assessmentId) {
-      // Convert answers object to array format for storage
-      const answersArray = Object.entries(answers).map(([questionId, answer]) => ({
+      const answersArray = Object.entries(sanitizedAnswers).map(([questionId, answer]) => ({
         question_id: questionId,
-        answer: answer
+        answer: answer,
       }))
-      
-      await supabase
+
+      const { error: updateError } = await supabase
         .from("assessments")
         .update({
           answers: answersArray,
@@ -320,6 +388,9 @@ Antworte im JSON-Format:
           completed_at: new Date().toISOString(),
         })
         .eq("id", assessmentId)
+        .is("completed_at", null)
+
+      if (updateError) console.error("Supabase update error:", updateError)
     }
 
     return NextResponse.json({
