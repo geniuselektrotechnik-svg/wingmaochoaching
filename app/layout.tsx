@@ -1,11 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter_Tight } from "next/font/google"
 import { Footer } from "@/components/footer"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+// Gleiche Schrift wie die Landingpage (self-hosted durch next/font, CSP-konform)
+const interTight = Inter_Tight({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Wingman Coaching | 360-Grad-Unternehmensanalyse",
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body className={`font-sans antialiased`}>
+      <body className={`${interTight.className} antialiased`}>
         {children}
         <Footer />
       </body>

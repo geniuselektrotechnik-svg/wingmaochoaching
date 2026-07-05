@@ -4,10 +4,10 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { SplitButton } from "@/components/ui/split-button"
 import { QuestionCard } from "@/components/assessment/question-card"
 import { ProgressBar } from "@/components/assessment/progress-bar"
 import { assessmentQuestions } from "@/lib/questions"
-import { ArrowLeft, ArrowRight } from "lucide-react"
 
 export default function QuestionsPage() {
   const router = useRouter()
@@ -173,30 +173,33 @@ export default function QuestionsPage() {
 
   if (analyzing) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <div className="text-center space-y-8 max-w-lg w-full">
-          <div className="relative">
-            <div className="w-20 h-20 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 border-4 border-yellow-500/30 border-b-transparent rounded-full animate-spin" />
-            </div>
-          </div>
-          <div className="space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">Wir analysieren Ihre Antworten...</h2>
-            <p className="text-muted-foreground text-sm md:text-base">
-              Wir erstellen gerade eine personalisierte Analyse für Ihr Unternehmen
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4">
+        <div className="text-center space-y-8 max-w-md w-full">
+          <img
+            src="/images/wingman-logo.png"
+            alt="Wingman Coaching"
+            className="h-10 md:h-12 w-auto mx-auto"
+          />
+          <div className="space-y-3">
+            <p className="text-[13px] font-medium uppercase tracking-[0.28em] text-white/50">
+              KI Auswertung läuft
+            </p>
+            <h2 className="text-2xl md:text-3xl font-medium tracking-[-0.02em] text-white">
+              Wir analysieren Ihre Antworten
+            </h2>
+            <p className="text-white/55 text-sm md:text-base">
+              Wir erstellen gerade eine personalisierte Analyse für Ihr Unternehmen.
             </p>
           </div>
-          
-          {/* Progress Bar */}
+
           <div className="space-y-3">
-            <div className="w-full bg-muted/30 rounded-full h-3 overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full transition-all duration-500 ease-out"
+            <div className="w-full h-[2px] bg-white/[0.13] overflow-hidden">
+              <div
+                className="h-full bg-[#fae608] transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[#fae608] tabular-nums">
               {progress}% abgeschlossen
             </p>
           </div>
@@ -206,30 +209,29 @@ export default function QuestionsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#050505]">
       {/* Logo Header */}
-      <div className="flex justify-between items-center pt-6 md:pt-8 pb-4 container mx-auto px-4 max-w-4xl">
-        <div className="flex-1" />
+      <div className="flex justify-between items-center pt-7 md:pt-9 pb-4 container mx-auto px-5 max-w-4xl">
         <img
           src="/images/wingman-logo.png"
           alt="Wingman Coaching"
-          className="h-12 md:h-16 w-auto"
+          className="h-10 md:h-12 w-auto"
         />
-        <div className="flex-1 flex justify-end">
+        {process.env.NODE_ENV !== "production" && (
           <Button
             variant="outline"
             size="sm"
             onClick={handleQuickFill}
-            className="text-xs bg-yellow-500/10 border-yellow-500/30 hover:bg-yellow-500/20"
+            className="text-xs bg-transparent border-white/20 text-white/70 hover:bg-white/10 rounded-none"
           >
             Quick Test
           </Button>
-        </div>
+        )}
       </div>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 md:py-12 max-w-4xl">
-        <div className="space-y-6 md:space-y-8">
+      <main className="container mx-auto px-5 py-8 md:py-12 max-w-4xl">
+        <div className="space-y-10 md:space-y-12">
           {/* Progress */}
           <ProgressBar current={currentIndex + 1} total={assessmentQuestions.length} />
 
@@ -237,25 +239,24 @@ export default function QuestionsPage() {
           <QuestionCard question={currentQuestion} value={answers[currentQuestion.id]} onAnswer={handleAnswer} />
 
           {/* Navigation */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4">
-            <Button
-              variant="outline"
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
+            <SplitButton
+              variant="dark"
+              direction="left"
               onClick={handleBack}
               disabled={currentIndex === 0}
-              className="gap-2 bg-transparent order-2 sm:order-1"
+              className="order-2 sm:order-1"
             >
-              <ArrowLeft className="w-4 h-4" />
               Zurück
-            </Button>
+            </SplitButton>
 
-            <Button
+            <SplitButton
               onClick={handleNext}
               disabled={!canGoNext || analyzing}
-              className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 order-1 sm:order-2"
+              className="order-1 sm:order-2"
             >
               {isLastQuestion ? "Analyse starten" : "Weiter"}
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+            </SplitButton>
           </div>
         </div>
       </main>
