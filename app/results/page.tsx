@@ -27,7 +27,7 @@ const typeIcons: { [key: string]: React.ElementType } = {
 function SectionHead({ label, title }: { label: string; title: string }) {
   return (
     <div className="space-y-2 mb-8">
-      <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ {label} /</p>
+      <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">{label}</p>
       <h2 className="text-2xl md:text-3xl font-medium tracking-[-0.02em] text-white">{title}</h2>
       <div className="h-[2px] w-full bg-[#fae608]/70 mt-4" />
     </div>
@@ -167,7 +167,7 @@ export default function ResultsPage() {
           {/* Header */}
           <div className="text-center space-y-4">
             <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">
-              / Ihre Auswertung /
+              Ihre Auswertung
             </p>
             <h1 className="text-4xl md:text-5xl font-medium tracking-[-0.02em] text-white">Ihre Ergebnisse</h1>
             <p className="text-[15px] text-white/60 max-w-2xl mx-auto leading-relaxed">
@@ -180,7 +180,7 @@ export default function ResultsPage() {
             <div className="p-7 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
               <div className="flex-1 text-center md:text-left space-y-4">
                 <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">
-                  / Wingman Mittelstandsindex /
+                  Wingman Mittelstandsindex
                 </p>
                 <div className="flex items-end gap-3 justify-center md:justify-start">
                   <span className="text-7xl md:text-8xl font-medium tracking-[-0.03em] text-[#fae608] leading-none">
@@ -212,7 +212,7 @@ export default function ResultsPage() {
               <div className="space-y-7">
                 <div className="text-center space-y-3">
                   <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">
-                    / Ihr Report /
+                    Ihr Report
                   </p>
                   <h3 className="text-2xl md:text-3xl font-medium tracking-[-0.02em] text-white">
                     Vollständigen Report erhalten
@@ -251,7 +251,7 @@ export default function ResultsPage() {
               </div>
             ) : (
               <div className="text-center space-y-4 py-6">
-                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ Versendet /</p>
+                <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">Versendet</p>
                 <h3 className="text-2xl md:text-3xl font-medium tracking-[-0.02em] text-white">
                   E-Mail erfolgreich versendet
                 </h3>
@@ -297,7 +297,7 @@ export default function ResultsPage() {
           <div className="grid lg:grid-cols-2 gap-[2px]">
             <div className="bg-[#0d0d0d] border border-white/10 p-7 md:p-8">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608] mb-6">
-                / Ihre Stärken /
+                Ihre Stärken
               </p>
               <ul className="space-y-5">
                 {aiAnalysis?.strengths?.map((strength: any, idx: number) => (
@@ -320,7 +320,7 @@ export default function ResultsPage() {
 
             <div className="bg-[#0d0d0d] border border-white/10 p-7 md:p-8">
               <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-white/60 mb-6">
-                / Entwicklungsbereiche /
+                Entwicklungsbereiche
               </p>
               <ul className="space-y-5">
                 {aiAnalysis?.developmentAreas?.map((area: any, idx: number) => (
@@ -361,7 +361,7 @@ export default function ResultsPage() {
 
           {/* CTA Erstgespräch */}
           <div className="bg-[#0d0d0d] border border-[#fae608]/40 p-8 md:p-14 text-center space-y-7">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ Jetzt starten /</p>
+            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">Jetzt starten</p>
             <h3 className="text-3xl md:text-4xl font-medium tracking-[-0.02em] text-white">
               Bereit für den nächsten Schritt?
             </h3>

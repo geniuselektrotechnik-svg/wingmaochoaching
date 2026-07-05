@@ -13,7 +13,7 @@ interface QuestionCardProps {
 function CategoryTag({ children }: { children: string }) {
   return (
     <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">
-      / {children} /
+      {children}
     </p>
   )
 }

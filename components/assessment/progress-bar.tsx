@@ -11,7 +11,7 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
     <div className="w-full">
       <div className="flex items-center justify-between mb-3 text-[13px] font-medium uppercase tracking-[0.04em]">
         <span className="text-white/85">
-          / Frage {current} von {total} /
+          Frage {current} von {total}
         </span>
         <span className="text-[#fae608] tabular-nums">{Math.round(percentage)}%</span>
       </div>

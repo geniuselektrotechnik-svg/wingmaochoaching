@@ -25,7 +25,7 @@ function Block({ label, text, muted = false }: { label: string; text: string; mu
           muted ? "text-white/60" : "text-[#fae608]"
         }`}
       >
-        / {label} /
+        {label}
       </p>
       <p className="text-[15px] text-white/80 leading-relaxed">{text}</p>
     </div>
@@ -48,7 +48,7 @@ export function TypeDescription({ type }: TypeDescriptionProps) {
           <TypeIcon className="w-8 h-8 md:w-10 md:h-10 text-[#0a0a0a]" strokeWidth={1.6} />
         </div>
         <div>
-          <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ Ihr Profil /</p>
+          <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">Ihr Profil</p>
           <h3 className="text-2xl md:text-3xl font-medium tracking-[-0.02em] text-white mt-1">{type}</h3>
         </div>
       </div>

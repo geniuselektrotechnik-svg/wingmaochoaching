@@ -118,7 +118,7 @@ export default function StartPage() {
         <div className="space-y-10">
           {/* Header */}
           <div className="space-y-4">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">/ Schritt 2 von 3 /</p>
+            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#fae608]">Schritt 2 von 3</p>
             <h1 className="text-3xl md:text-4xl font-medium tracking-[-0.02em] leading-[1.15] text-white">
               Ihre Daten für den Report
             </h1>
