@@ -73,7 +73,7 @@ export async function generatePDF(
     doc.addImage(WINGMAN_LOGO_PNG, "PNG", (pageWidth - logoWidth) / 2, logoY - 10, logoWidth, logoHeight)
   } catch {
     // Fallback: Text-Logo, falls das Bild nicht geladen werden kann
-    doc.setTextColor(251, 191, 36)
+    doc.setTextColor(250, 230, 8)
     doc.setFontSize(18)
     doc.setFont("helvetica", "bold")
     doc.text("WINGMAN", pageWidth / 2, logoY, { align: "center" })
@@ -86,9 +86,9 @@ export async function generatePDF(
   doc.setTextColor(180, 180, 180)
   doc.setFontSize(9)
   doc.setFont("helvetica", "bold")
-  doc.text("WINGMAN MITTELSTANDSINDEX", pageWidth / 2, 60, { align: "center" })
+  doc.text("/ WINGMAN MITTELSTANDSINDEX /", pageWidth / 2, 60, { align: "center" })
 
-  doc.setTextColor(251, 191, 36) // Bright yellow
+  doc.setTextColor(250, 230, 8) // Bright yellow
   doc.setFontSize(32)
   doc.setFont("helvetica", "bold")
   doc.text("360° UNTERNEHMENSANALYSE", pageWidth / 2, 75, { align: "center" })
@@ -113,18 +113,20 @@ export async function generatePDF(
     doc.text(nameText, pageWidth / 2, 85, { align: "center" })
   }
   
-  // Large circle with score - nur gelber Kreis, kein blauer Schatten
-  doc.setFillColor(251, 191, 36) // Bright yellow circle
-  doc.circle(pageWidth / 2, 135, 35, "F")
-  
-  // Punktzahl im Kreis
-  doc.setTextColor(0, 0, 0)
-  doc.setFontSize(44)
-  doc.setFont("helvetica", "bold")
+  // Score als grosse Landing-Typografie mit duennen gelben Linien
   const indexScore = (result as any).wingmanIndex || result.overallScore
-  doc.text(indexScore.toString(), pageWidth / 2, 140, { align: "center" })
-  doc.setFontSize(13)
-  doc.text("/100", pageWidth / 2, 153, { align: "center" })
+  doc.setDrawColor(250, 230, 8)
+  doc.setLineWidth(0.6)
+  doc.line(margin + 20, 108, pageWidth - margin - 20, 108)
+  doc.setTextColor(250, 230, 8)
+  doc.setFontSize(88)
+  doc.setFont("helvetica", "bold")
+  doc.text(indexScore.toString(), pageWidth / 2 - 8, 148, { align: "center" })
+  doc.setTextColor(140, 140, 140)
+  doc.setFontSize(20)
+  doc.setFont("helvetica", "normal")
+  doc.text("/100", pageWidth / 2 + 24, 148)
+  doc.line(margin + 20, 160, pageWidth - margin - 20, 160)
 
   // Index Subtitle
   const indexSubtitle = (result as any).indexSubtitle || ""
@@ -136,7 +138,7 @@ export async function generatePDF(
   }
 
   // Unternehmertyp Text darunter
-  doc.setTextColor(251, 191, 36)
+  doc.setTextColor(250, 230, 8)
   doc.setFontSize(15)
   doc.setFont("helvetica", "bold")
   doc.text(result.entrepreneurType, pageWidth / 2, 200, { align: "center" })
@@ -153,12 +155,16 @@ export async function generatePDF(
   yPosition = 30
 
   // Modern header bar
-  doc.setFillColor(251, 191, 36)
-  doc.rect(margin, yPosition, 5, 15, "F")
-  doc.setTextColor(251, 191, 36)
-  doc.setFontSize(24)
+  doc.setTextColor(250, 230, 8)
+  doc.setFontSize(10)
   doc.setFont("helvetica", "bold")
-  doc.text("EXECUTIVE SUMMARY", margin + 10, yPosition + 10)
+  doc.text("/ EXECUTIVE SUMMARY /", margin, yPosition)
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(22)
+  doc.text("Executive Summary", margin, yPosition + 12)
+  doc.setDrawColor(250, 230, 8)
+  doc.setLineWidth(0.6)
+  doc.line(margin, yPosition + 17, pageWidth - margin, yPosition + 17)
   yPosition += 20
 
   doc.setTextColor(200, 200, 200)
@@ -168,7 +174,7 @@ export async function generatePDF(
   yPosition += 12
 
   // Unternehmertyp anzeigen
-  doc.setTextColor(251, 191, 36)
+  doc.setTextColor(250, 230, 8)
   doc.setFontSize(16)
   doc.setFont("helvetica", "bold")
   doc.text(result.entrepreneurType, margin, yPosition)
@@ -186,12 +192,12 @@ export async function generatePDF(
     const strengthLines = doc.splitTextToSize(profile.staerken, pageWidth - margin * 2 - 20)
     const strengthBoxHeight = 22 + strengthLines.length * 5
     
-    doc.setFillColor(251, 191, 36)
+    doc.setFillColor(250, 230, 8)
     doc.rect(margin, strengthBoxY, 4, strengthBoxHeight, "F")
     doc.setFillColor(40, 35, 20)
-    doc.roundedRect(margin + 4, strengthBoxY, pageWidth - margin * 2 - 4, strengthBoxHeight, 2, 2, "F")
+    doc.roundedRect(margin + 4, strengthBoxY, pageWidth - margin * 2 - 4, strengthBoxHeight, 0, 0, "F")
     
-    doc.setTextColor(251, 191, 36)
+    doc.setTextColor(250, 230, 8)
     doc.setFontSize(12)
     doc.setFont("helvetica", "bold")
     doc.text("Ihre Top-Stärken:", margin + 10, strengthBoxY + 12)
@@ -208,12 +214,12 @@ export async function generatePDF(
     const riskLines = doc.splitTextToSize(profile.risiken, pageWidth - margin * 2 - 20)
     const riskBoxHeight = 22 + riskLines.length * 5
     
-    doc.setFillColor(251, 191, 36)
+    doc.setFillColor(250, 230, 8)
     doc.rect(margin, riskBoxY, 4, riskBoxHeight, "F")
     doc.setFillColor(40, 35, 20)
-    doc.roundedRect(margin + 4, riskBoxY, pageWidth - margin * 2 - 4, riskBoxHeight, 2, 2, "F")
+    doc.roundedRect(margin + 4, riskBoxY, pageWidth - margin * 2 - 4, riskBoxHeight, 0, 0, "F")
     
-    doc.setTextColor(251, 191, 36)
+    doc.setTextColor(250, 230, 8)
     doc.setFontSize(12)
     doc.setFont("helvetica", "bold")
     doc.text("Typische Risiken:", margin + 10, riskBoxY + 12)
@@ -230,12 +236,12 @@ export async function generatePDF(
     const devLines = doc.splitTextToSize(profile.entwicklung, pageWidth - margin * 2 - 20)
     const devBoxHeight = 22 + devLines.length * 5
     
-    doc.setFillColor(251, 191, 36)
+    doc.setFillColor(250, 230, 8)
     doc.rect(margin, devBoxY, 4, devBoxHeight, "F")
     doc.setFillColor(40, 35, 20)
-    doc.roundedRect(margin + 4, devBoxY, pageWidth - margin * 2 - 4, devBoxHeight, 2, 2, "F")
+    doc.roundedRect(margin + 4, devBoxY, pageWidth - margin * 2 - 4, devBoxHeight, 0, 0, "F")
     
-    doc.setTextColor(251, 191, 36)
+    doc.setTextColor(250, 230, 8)
     doc.setFontSize(12)
     doc.setFont("helvetica", "bold")
     doc.text("Strategischer Entwicklungsfokus:", margin + 10, devBoxY + 12)
@@ -251,7 +257,7 @@ export async function generatePDF(
   addPageBreak()
   pageNumber++
 
-  addText("Ihre 360° Kompetenz-Übersicht als Unternehmer", 22, true, [255, 215, 0])
+  addText("Ihre 360° Kompetenz-Übersicht als Unternehmer", 22, true, [250, 230, 8])
   yPosition += 10
 
   // Einleitungstext
@@ -267,17 +273,17 @@ export async function generatePDF(
   const score = (result as any).wingmanIndex || result.overallScore
   const subtitle = (result as any).indexSubtitle || ""
   
-  doc.setFillColor(251, 191, 36)
+  doc.setFillColor(250, 230, 8)
   doc.rect(margin, yPosition, 4, 35, "F")
   doc.setFillColor(40, 35, 20)
-  doc.roundedRect(margin + 4, yPosition, pageWidth - margin * 2 - 4, 35, 2, 2, "F")
+  doc.roundedRect(margin + 4, yPosition, pageWidth - margin * 2 - 4, 35, 0, 0, "F")
   
   doc.setTextColor(148, 163, 184)
   doc.setFontSize(9)
   doc.setFont("helvetica", "bold")
-  doc.text("WINGMAN MITTELSTANDSINDEX", margin + 10, yPosition + 10)
+  doc.text("/ WINGMAN MITTELSTANDSINDEX /", margin + 10, yPosition + 10)
   
-  doc.setTextColor(251, 191, 36)
+  doc.setTextColor(250, 230, 8)
   doc.setFontSize(28)
   doc.setFont("helvetica", "bold")
   doc.text(score.toString(), margin + 10, yPosition + 25)
@@ -292,7 +298,7 @@ export async function generatePDF(
   yPosition += 45
 
   // Die 3 Wingman-Perspektiven
-  addText("Die 3 Wingman-Perspektiven", 16, true, [251, 191, 36])
+  addText("Die 3 Wingman-Perspektiven", 16, true, [250, 230, 8])
   yPosition += 5
   
   doc.setTextColor(148, 163, 184)
@@ -310,7 +316,7 @@ export async function generatePDF(
   doc.setFillColor(59, 130, 246)
   doc.rect(margin, yPosition, 3, 25, "F")
   doc.setFillColor(20, 30, 50)
-  doc.roundedRect(margin + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 2, 2, "F")
+  doc.roundedRect(margin + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 0, 0, "F")
   doc.setTextColor(59, 130, 246)
   doc.setFontSize(11)
   doc.setFont("helvetica", "bold")
@@ -326,7 +332,7 @@ export async function generatePDF(
   doc.setFillColor(168, 85, 247)
   doc.rect(col2X, yPosition, 3, 25, "F")
   doc.setFillColor(20, 30, 50)
-  doc.roundedRect(col2X + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 2, 2, "F")
+  doc.roundedRect(col2X + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 0, 0, "F")
   doc.setTextColor(168, 85, 247)
   doc.setFontSize(11)
   doc.setFont("helvetica", "bold")
@@ -342,7 +348,7 @@ export async function generatePDF(
   doc.setFillColor(34, 197, 94)
   doc.rect(col3X, yPosition, 3, 25, "F")
   doc.setFillColor(20, 30, 50)
-  doc.roundedRect(col3X + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 2, 2, "F")
+  doc.roundedRect(col3X + 3, yPosition, (pageWidth - margin * 2 - 6) / 3 - 2, 25, 0, 0, "F")
   doc.setTextColor(34, 197, 94)
   doc.setFontSize(11)
   doc.setFont("helvetica", "bold")
@@ -372,7 +378,7 @@ export async function generatePDF(
 
     // Bar chart - kompakter
     doc.setFillColor(220, 220, 220)
-    doc.roundedRect(margin, yPosition, pageWidth - margin * 2 - 30, 6, 2, 2, "F")
+    doc.roundedRect(margin, yPosition, pageWidth - margin * 2 - 30, 6, 0, 0, "F")
 
     const barWidth = ((pageWidth - margin * 2 - 30) * cat.percentage) / 100
 
@@ -385,10 +391,10 @@ export async function generatePDF(
       doc.setFillColor(239, 68, 68) // Rot
     }
 
-    doc.roundedRect(margin, yPosition, barWidth, 6, 2, 2, "F")
+    doc.roundedRect(margin, yPosition, barWidth, 6, 0, 0, "F")
 
     // Score text
-    doc.setTextColor(251, 191, 36)
+    doc.setTextColor(250, 230, 8)
     doc.setFontSize(10)
     doc.setFont("helvetica", "bold")
     doc.text(`${cat.percentage}%`, pageWidth - margin - 20, yPosition + 5)
@@ -401,7 +407,7 @@ export async function generatePDF(
     addPageBreak()
     pageNumber++
 
-    addText(`Kompetenzbereich ${index + 1}: ${cat.category}`, 18, true, [255, 215, 0])
+    addText(`Kompetenzbereich ${index + 1}: ${cat.category}`, 18, true, [250, 230, 8])
     yPosition += 5
 
     // Score circle
@@ -456,7 +462,7 @@ export async function generatePDF(
 
     // Category-specific insights
     checkPageBreak(60)
-    addText("Einordnung (warum ist das relevant?):", 12, true, [255, 215, 0])
+    addText("Einordnung (warum ist das relevant?):", 12, true, [250, 230, 8])
 
     const categoryInsights: { [key: string]: { high: string; medium: string; low: string } } = {
       "Unternehmerisches Denken": {
@@ -564,8 +570,8 @@ export async function generatePDF(
       const addSectionHeader = (title: string) => {
         checkPageBreak(40)
         doc.setFillColor(40, 40, 40)
-        doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 12, 2, 2, "F")
-        doc.setTextColor(251, 191, 36)
+        doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 12, 0, 0, "F")
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(13)
         doc.setFont("helvetica", "bold")
         doc.text(title, margin + 5, yPosition + 8)
@@ -674,7 +680,7 @@ export async function generatePDF(
         
         if (aiData.actionPlan.mediumTerm && aiData.actionPlan.mediumTerm.length > 0) {
           checkPageBreak(40)
-          doc.setTextColor(251, 191, 36)
+          doc.setTextColor(250, 230, 8)
           doc.setFontSize(11)
           doc.setFont("helvetica", "bold")
           doc.text("Mittelfristig (30-60 Tage):", margin, yPosition)
@@ -699,7 +705,7 @@ export async function generatePDF(
   checkPageBreak(40)
   addSectionHeader("Empfohlenes Wingman Programm")
         const wp = aiData.recommendations.wingmanProgram
-        doc.setTextColor(251, 191, 36)
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(14)
         doc.setFont("helvetica", "bold")
         doc.text(wp.primary || "MASTERCLASS CONSULTING", margin, yPosition)
@@ -734,12 +740,12 @@ export async function generatePDF(
   addPageBreak()
   pageNumber++
 
-  addText("Ihre Stärken & Entwicklungsbereiche", 22, true, [255, 215, 0])
+  addText("Ihre Stärken & Entwicklungsbereiche", 22, true, [250, 230, 8])
   yPosition += 10
 
   // Strengths
   doc.setFillColor(34, 197, 94)
-  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 8, 2, 2, "F")
+  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 8, 0, 0, "F")
   yPosition += 6
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(14)
@@ -779,7 +785,7 @@ export async function generatePDF(
 
   // Development Areas
   doc.setFillColor(239, 68, 68)
-  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 8, 2, 2, "F")
+  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 8, 0, 0, "F")
   yPosition += 6
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(14)
@@ -804,7 +810,7 @@ export async function generatePDF(
   addPageBreak()
   pageNumber++
 
-  addText("Ihr strategischer Entwicklungsplan", 22, true, [255, 215, 0])
+  addText("Ihr strategischer Entwicklungsplan", 22, true, [250, 230, 8])
   yPosition += 10
 
   addText("Basierend auf Ihrer Analyse empfehlen wir folgende priorisierte Vorgehensweise:", 11)
@@ -883,7 +889,7 @@ export async function generatePDF(
   const actionBoxHeight = 18 + actionSteps.length * 7
   
   doc.setFillColor(30, 30, 30)
-  doc.roundedRect(margin, actionBoxY, pageWidth - margin * 2, actionBoxHeight, 3, 3, "F")
+  doc.roundedRect(margin, actionBoxY, pageWidth - margin * 2, actionBoxHeight, 0, 0, "F")
   
   doc.setTextColor(59, 130, 246)
   doc.setFontSize(12)
@@ -906,13 +912,17 @@ export async function generatePDF(
       pageNumber++
 
       // Header with category
-      doc.setFillColor(251, 191, 36)
-      doc.rect(margin, yPosition, 5, 15, "F")
-      doc.setTextColor(251, 191, 36)
-      doc.setFontSize(20)
+      doc.setTextColor(250, 230, 8)
+      doc.setFontSize(10)
       doc.setFont("helvetica", "bold")
-      doc.text(`${cat.category}`, margin + 10, yPosition + 10)
-      yPosition += 25
+      doc.text("/ KOMPETENZBEREICH /", margin, yPosition)
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(20)
+      doc.text(`${cat.category}`, margin, yPosition + 12)
+      doc.setDrawColor(250, 230, 8)
+      doc.setLineWidth(0.6)
+      doc.line(margin, yPosition + 17, pageWidth - margin, yPosition + 17)
+      yPosition += 30
 
       doc.setTextColor(100, 116, 139)
       doc.setFontSize(12)
@@ -931,12 +941,12 @@ export async function generatePDF(
         const stateLines = doc.splitTextToSize(categoryState.state, pageWidth - margin * 2 - 20)
         const stateBoxHeight = 20 + stateLines.length * 6
         
-        doc.setFillColor(251, 191, 36)
+        doc.setFillColor(250, 230, 8)
         doc.rect(margin, stateBoxStartY, 4, stateBoxHeight, "F")
         doc.setFillColor(30, 28, 20)
-        doc.roundedRect(margin + 4, stateBoxStartY, pageWidth - margin * 2 - 4, stateBoxHeight, 2, 2, "F")
+        doc.roundedRect(margin + 4, stateBoxStartY, pageWidth - margin * 2 - 4, stateBoxHeight, 0, 0, "F")
         
-        doc.setTextColor(251, 191, 36)
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(12)
         doc.setFont("helvetica", "bold")
         doc.text("Ihr typischer emotionaler Zustand:", margin + 10, stateBoxStartY + 10)
@@ -954,12 +964,12 @@ export async function generatePDF(
         const handlungLines = doc.splitTextToSize(categoryState.handlung, pageWidth - margin * 2 - 20)
         const handlungBoxHeight = 20 + handlungLines.length * 6
         
-        doc.setFillColor(251, 191, 36)
+        doc.setFillColor(250, 230, 8)
         doc.rect(margin, handlungBoxStartY, 4, handlungBoxHeight, "F")
         doc.setFillColor(40, 35, 20)
-        doc.roundedRect(margin + 4, handlungBoxStartY, pageWidth - margin * 2 - 4, handlungBoxHeight, 2, 2, "F")
+        doc.roundedRect(margin + 4, handlungBoxStartY, pageWidth - margin * 2 - 4, handlungBoxHeight, 0, 0, "F")
         
-        doc.setTextColor(251, 191, 36)
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(12)
         doc.setFont("helvetica", "bold")
         doc.text("Empfohlene konkrete Handlung:", margin + 10, handlungBoxStartY + 10)
@@ -971,7 +981,7 @@ export async function generatePDF(
         yPosition = handlungBoxStartY + handlungBoxHeight + 15
 
         // Warum das wichtig ist
-        doc.setTextColor(251, 191, 36)
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(13)
         doc.setFont("helvetica", "bold")
         doc.text("Warum das für Sie entscheidend ist:", margin, yPosition)
@@ -997,7 +1007,7 @@ export async function generatePDF(
         yPosition += whyLines.length * 6 + 15
 
         // Quick Win für diesen Bereich
-        doc.setTextColor(251, 191, 36)
+        doc.setTextColor(250, 230, 8)
         doc.setFontSize(13)
         doc.setFont("helvetica", "bold")
         doc.text("Ihr Quick Win für die nächsten 7 Tage:", margin, yPosition)
@@ -1027,7 +1037,7 @@ export async function generatePDF(
   // ==================== PAGE 15: METHODOLOGY ====================
   addPageBreak()
 
-  addText("Über diese Analyse", 22, true, [255, 215, 0])
+  addText("Über diese Analyse", 22, true, [250, 230, 8])
   yPosition += 10
 
   addText("Wissenschaftlicher Hintergrund", 14, true)
@@ -1067,7 +1077,7 @@ export async function generatePDF(
   // Fakthinweis - kleingeschrieben
   doc.setFillColor(230, 245, 250)
   doc.setDrawColor(59, 130, 246)
-  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 0.5, 1, 1, "S")
+  doc.roundedRect(margin, yPosition, pageWidth - margin * 2, 0.5, 0, 0, "S")
   yPosition += 8
 
   doc.setTextColor(59, 130, 246)
@@ -1095,7 +1105,7 @@ export async function generatePDF(
   // ==================== NEXT STEPS & CTA ====================
   addPageBreak()
 
-  addText("Wie geht es jetzt weiter?", 22, true, [255, 215, 0])
+  addText("Wie geht es jetzt weiter?", 22, true, [250, 230, 8])
   yPosition += 10
 
   addText(
@@ -1143,10 +1153,10 @@ export async function generatePDF(
   const recBoxHeight = 14 + 8 + descLines.length * 5 + 5 + 10 + 10 + 7 + 18 + 15
   
   doc.setFillColor(40, 35, 20)
-  doc.roundedRect(margin, recBoxY, pageWidth - margin * 2, recBoxHeight, 3, 3, "F")
+  doc.roundedRect(margin, recBoxY, pageWidth - margin * 2, recBoxHeight, 0, 0, "F")
   
   let recY = recBoxY + 12
-  doc.setTextColor(251, 191, 36)
+  doc.setTextColor(250, 230, 8)
   doc.setFontSize(14)
   doc.setFont("helvetica", "bold")
   // Remove "Der" from entrepreneurType if present
@@ -1212,8 +1222,8 @@ export async function generatePDF(
   const buttonX = (pageWidth - buttonWidth) / 2
 
   // Button Background (Gelb)
-  doc.setFillColor(251, 191, 36)
-  doc.roundedRect(buttonX, buttonY, buttonWidth, buttonHeight, 3, 3, "F")
+  doc.setFillColor(250, 230, 8)
+  doc.roundedRect(buttonX, buttonY, buttonWidth, buttonHeight, 0, 0, "F")
 
   // Button Text (Schwarz)
   doc.setTextColor(0, 0, 0)
@@ -1234,7 +1244,7 @@ export async function generatePDF(
 
   const contactBoxY = yPosition
   doc.setFillColor(0, 0, 0)
-  doc.roundedRect(margin, contactBoxY, pageWidth - margin * 2, 50, 3, 3, "F")
+  doc.roundedRect(margin, contactBoxY, pageWidth - margin * 2, 50, 0, 0, "F")
   
   doc.setTextColor(255, 215, 0)
   doc.setFontSize(16)
@@ -1251,7 +1261,7 @@ export async function generatePDF(
 
   // Call-to-Action Button
   doc.setFillColor(255, 215, 0)
-  doc.roundedRect(margin + 10, yPosition, pageWidth - margin * 2 - 20, 20, 3, 3, "F")
+  doc.roundedRect(margin + 10, yPosition, pageWidth - margin * 2 - 20, 20, 0, 0, "F")
   
   doc.setTextColor(0, 0, 0)
   doc.setFontSize(14)
