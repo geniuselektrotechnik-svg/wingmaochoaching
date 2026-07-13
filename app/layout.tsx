@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter_Tight } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import { Footer } from "@/components/footer"
 import "./globals.css"
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`${interTight.className} antialiased`}>
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   )
